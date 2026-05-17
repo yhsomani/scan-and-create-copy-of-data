@@ -1,0 +1,22 @@
+[lint]
+line-length = 100
+target-version = "py39"
+
+[lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["F401", "S101"]
+
+[lint.select]
+E = ["E"]   # pycodestyle errors
+W = ["W"]   # pycodestyle warnings
+F = ["F"]   # pyflakes
+I = ["I"]   # isort
+N = ["N"]   # pep8-naming
+UP = ["UP"] # pyupgrade
+S = ["S"]   # bandit
+B = ["B"]   # flake8-bugbear
+C4 = ["C4"] # flake8-comprehensions
+
+[format]
+quote-style = "double"
+indent-style = "space"

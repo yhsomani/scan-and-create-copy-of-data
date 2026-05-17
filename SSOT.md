@@ -1,0 +1,130 @@
+# Antigravity Scanner — Single Source of Truth (SSOT)
+
+## 1. PROJECT OVERVIEW
+Antigravity Scanner is a high-performance, professional-grade desktop utility for massive-scale repository analysis, code extraction, and file organization. 
+- **Goals**: Facilitate ingestion of massive codebases (100GB+) without memory exhaustion for LLM context preparation and provide robust file organization tools.
+- **Target Users**: Developers, Data Engineers, AI Practitioners.
+- **Business/System Purpose**: Streamline the preparation of structured data from complex directory trees.
+- **Major Workflows**: Scanning and text extraction, Directory cleaning and hierarchy flattening.
+- **Major System Modules**: GUI (PyQt6), CLI (Typer), Core Engine (ThreadPoolExecutor), Organization Toolkit.
+- **Core Technical Stack**: Python 3.12+, PyQt6, SQLAlchemy, SQLite, Typer.
+- **Platform Limitations**: Primarily targeted for Windows desktop execution (via `build_exe.py`).
+
+## 2. COMPLETE ARCHITECTURE OVERVIEW
+The architecture follows a dual-interface desktop application model utilizing a shared core engine.
+- **Frontend Architecture**: PyQt6-based desktop UI. Unified single-window dashboard with tabbed navigation (Primary, Advanced, Organization). Designed with Apple HIG principles.
+- **Backend Architecture**: Local Python 3.12 Core Engine.
+  - `DirectoryScanner`: Orchestrates recursive traversal using `ThreadPoolExecutor`.
+  - `FileFilter`: Applies `.scanignore` and binary detection logic.
+  - `OutputWriter`: Handles chunked, multi-file, or single-file atomic writing.
+- **API Architecture**: N/A (Local desktop app).
+- **Database Architecture**: Local SQLite database (`antigravity_scanner.db`) managed via SQLAlchemy ORM (WAL mode enabled).
+- **Queue/Websocket/AI/Preview/Youtube Architectures**: N/A (Local utility application).
+
+## 3. COMPLETE FEATURE INVENTORY
+- **Massive-Scale Scanner**: Parallelized traversal, incremental caching, `.scanignore` support.
+- **Dynamic Output Partitioning**: Single, Multi (by extension), and Chunked modes. Real-time compression (Gzip).
+- **File Organizer Toolkit**:
+  - **Prefixer**: Add/remove parent folder names as prefixes.
+  - **Cleaner**: Remove duplicate numeric suffixes.
+  - **Purger**: Recursively remove empty folders.
+  - **Hierarchy Shifter**: Move files up one level or completely flatten nested trees to the root.
+  - **Pattern Mover**: Group files based on naming patterns.
+- **System Cleanup**: Admin utility to purge Windows temp caches.
+
+## 4. USER ROLE SYSTEM
+**N/A**: Antigravity Scanner is a local desktop application executed by the system user. There are no role-based access controls (RBAC), admins, guests, or teachers.
+
+## 5. COMPLETE PAGE-BY-PAGE ANALYSIS
+**GUI Dashboard Analysis**:
+- **Primary Tab**: Target/Output directory selection, Scan Mode (Single/Multi/Chunked), Worker count, Recent Scan History ledger.
+- **Advanced Tab**: Output limits (Max MB/Files), Engine Flags (Resume, Incremental, Follow Symlinks, Gzip, Dry-run), Filters (Skip hidden, large files), Console real-time log streaming.
+- **Organization Tab**: Integrated toolkit execution buttons (Prefix, Clean, Purge, Flatten) with background progress snackbars.
+
+**CLI Analysis**:
+- `scan` command: Complete parity with GUI scan configuration (`--mode`, `--max-chunk-mb`, `--workers`, `--auto-calc`).
+
+## 6. COMPLETE API DOCUMENTATION
+**N/A**: This application does not expose or consume external REST/GraphQL APIs. Communication between UI and Engine is done via direct Python function calls and `QThread` signals.
+
+## 7. DATABASE DOCUMENTATION
+- **Engine**: SQLite 3 with WAL (Write-Ahead Logging) enabled. File: `antigravity_scanner.db`.
+- **ORM**: SQLAlchemy.
+- **Schemas / Tables**:
+  - `ScanRecord`: Tracks scan history, metrics (files processed, bytes, elapsed time), mode, and success status.
+  - `AppSetting`: Stores sticky GUI preferences and application state.
+
+## 8. YOUTUBE SYSTEM DOCUMENTATION
+**N/A**: No YouTube integration in this project.
+
+## 9. AI SYSTEM DOCUMENTATION
+**N/A**: While the tool prepares text data for LLMs, it does not integrate live AI providers, prompts, or model inference workflows.
+
+## 10. PREVIEW / CONVERTER SYSTEM DOCUMENTATION
+**N/A**: No live preview, rendering pipelines, or component matching.
+
+## 11. FRONTEND DOCUMENTATION
+- **UI Framework**: PyQt6.
+- **Architecture**: Separated into components (`components.py`), controllers (`controllers.py`), and views (`app.py`, `views/`).
+- **Styling**: Standardized `QSS` (Qt Style Sheets) defined in `theme.py`, following Apple Design System tokens (Dark/Light modes).
+- **State Management**: Handled via `controllers.py` and persistent `AppSetting` database records.
+- **Concurrency**: `QThreadPool` and `QRunnable` ensure the UI remains responsive during intensive file I/O.
+
+## 12. BACKEND DOCUMENTATION
+- **Core Engine (`src/antigravity/core/`)**:
+  - `scanner.py`: Manages the concurrent directory walk.
+  - `filters.py`: Logic for ignoring files.
+  - `writer.py`: Handles atomic file writing and partitioning logic.
+  - `chunk_manager.py`: Calculates output split logic.
+- **Services (`src/antigravity/services/`)**:
+  - `database.py`: SQLAlchemy session factories.
+  - `history.py`: Ledger management.
+  - `settings.py`: UI preference loading/saving.
+
+## 13. ERROR HANDLING DOCUMENTATION
+- **Global Error System**: `logger.py` handles application-wide structured logging.
+- **Backend Error Handling**: Skipped files or unreadable paths are gracefully caught and logged to `error.log` in the output directory. The scan continues without crashing.
+- **Frontend Error Handling**: Exceptions in worker threads emit signals to the main UI thread, displaying as error Snackbars or warning dialogs.
+- **Recovery Flows**: Interrupted scans maintain state in `.scan_state.json` allowing for resume operations.
+
+## 14. SECURITY DOCUMENTATION
+- **Path Traversal Protection**: Uses `pathlib` for absolute path normalization to prevent writing outside designated output directories.
+- **Safe I/O**: Atomic writes prevent data corruption during interruption.
+- **XSS/CSRF/Auth**: N/A (Desktop application).
+
+## 15. PERFORMANCE DOCUMENTATION
+- **Parallelization**: `ThreadPoolExecutor` maximizes I/O throughput across CPU cores.
+- **Memory Optimization**: Streaming I/O with 1MB chunk buffers allows the tool to process arbitrarily large files without RAM exhaustion.
+- **Incremental Cache**: Hashes file mtime/size into `scan_cache.json` to instantly skip unmodified files on subsequent runs.
+- **Database Optimization**: SQLite WAL mode prevents read/write locks during UI updates.
+
+## 16. DEVOPS & DEPLOYMENT
+- **Local Setup**: `python -m venv .venv`, `pip install -r requirements.txt`.
+- **Build Process**: `build_exe.py` wraps PyInstaller to create a standalone Windows `.exe` file. Includes specs via `AntigravityScanner.spec`.
+- **Deployment**: Distributed as a portable executable.
+- **Monitoring/Logging**: Handled locally via `logs/` directory and per-scan `error.log`.
+
+## 17. ENVIRONMENT VARIABLES
+**N/A**: Configuration is handled via `pyproject.toml`, database `AppSetting`, and CLI flags. No environment variables are strictly required for operation.
+
+## 18. KNOWN ISSUES & TECHNICAL DEBT
+- **Technical Debt**: Former plugin system and security scanning modules were pruned but traces may remain in old branch history.
+- **Future Improvements**: Cross-platform executable builds (macOS/Linux) via GitHub Actions.
+
+## 19. REBUILD INSTRUCTIONS
+1. **Clone Repository**: Extract the codebase.
+2. **Environment Setup**:
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
+3. **Database Initialization**: Runs automatically on first execution via SQLAlchemy `create_all()`.
+4. **Execution**: Run `python src/antigravity/__main__.py` to start the GUI.
+5. **Deployment Build**: Run `python build_exe.py` to generate the standalone Windows binary.
+
+## 20. FINAL AUDIT SECTION
+- **Feature Completeness**: All engine modes and UI tabs are fully implemented.
+- **Missing Systems**: None.
+- **Documentation Refactoring**: `README.md` and `USAGE.md` have been consolidated into this `SSOT.md` and marked for removal.
+- **Readiness**: Production-ready. This SSOT serves as the definitive reference for the Antigravity Scanner architecture.

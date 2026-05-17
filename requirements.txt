@@ -1,0 +1,7 @@
+PyQt6>=6.6.0
+SQLAlchemy>=2.0.0
+pydantic>=2.5.0
+typer[all]>=0.12.0
+rich>=13.0.0
+qasync>=0.27.1
+xxhash>=3.4.1

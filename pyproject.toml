@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "antigravity-scanner"
+version = "5.0.0"
+description = "High-performance directory analysis and organization suite."
+readme = "SSOT.md"
+requires-python = ">=3.12"
+dependencies = [
+    "PyQt6>=6.6.0",
+    "SQLAlchemy>=2.0.0",
+    "pydantic>=2.5.0",
+    "typer[all]>=0.12.0",
+    "rich>=13.0.0",
+    "qasync>=0.27.1",
+    "xxhash>=3.4.1",
+]
+
+[project.scripts]
+antigravity = "antigravity.__main__:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = {find = {where = ["src"]}}
+
+[tool.black]
+line-length = 88
+target-version = ['py312']
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
