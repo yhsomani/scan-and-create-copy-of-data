@@ -1,2 +1,6 @@
 [console_scripts]
-antigravity = antigravity.__main__:main
+antigravity = antigravity.cli:app
+antigravity-gui = antigravity.__main__:main
+
+[gui_scripts]
+antigravity-gui = antigravity.__main__:main

@@ -1,0 +1,30 @@
+{
+  "scans": [
+    {
+      "id": 1,
+      "status": "pending",
+      "created_at": "2026-05-17T07:49:07.215667",
+      "updated_at": "2026-05-17T07:49:07.215667",
+      "started_at": null,
+      "completed_at": null,
+      "source_paths": [],
+      "output_dir": "",
+      "scan_mode": "single",
+      "config_json": {
+        "root_path": "/test",
+        "output_path": "/output",
+        "scan_mode": "single",
+        "config_json": {}
+      },
+      "files_scanned": 0,
+      "lines_processed": 0,
+      "bytes_processed": 0,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "error_messages": [],
+      "progress_percent": 0.0,
+      "estimated_time_remaining": null
+    }
+  ],
+  "next_id": 2
+}

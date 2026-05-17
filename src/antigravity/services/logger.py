@@ -56,3 +56,7 @@ def setup_logging(log_file: str = "scanner.log") -> QtLogSignals:
     logger.addHandler(console_handler)
     
     return signals
+
+def get_logger(name: str = __name__) -> logging.Logger:
+    """Get a logger instance with the given name."""
+    return logging.getLogger(name)

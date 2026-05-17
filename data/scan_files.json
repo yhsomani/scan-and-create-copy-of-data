@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "id": 1,
+      "scan_id": 2,
+      "source_path": "/home/test.py",
+      "output_path": "",
+      "file_size": 1024,
+      "line_count": 50,
+      "file_hash": "",
+      "mime_type": "",
+      "extension": ".py",
+      "status": "processed",
+      "error_message": "",
+      "processed_at": "2026-05-17T07:38:37.474295"
+    }
+  ],
+  "next_id": 2
+}

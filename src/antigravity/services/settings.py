@@ -1,70 +1,74 @@
 """
-Settings Service — Persistent key-value settings in SQLite.
+Settings Service — Persistent key-value settings in JSON.
 """
 from __future__ import annotations
 
-from typing import Dict
+from typing import Any, Dict, Optional
 
-from sqlalchemy import select
-from antigravity.services.database import (
-    AppSetting, get_session_context
-)
+from antigravity.services.json_store import JSONStore
 
 
-DEFAULTS: Dict[str, str] = {
+DEFAULTS: Dict[str, Any] = {
     "theme": "dark",
     "default_mode": "single",
     "default_format": "text",
-    "default_workers": "4",
-    "max_chunk_mb": "10.0",
-    "max_output_files": "5",
-    "skip_hidden": "true",
-    "allow_large_files": "true",
+    "default_workers": 4,
+    "max_chunk_mb": 10.0,
+    "max_output_files": 5,
+    "skip_hidden": True,
+    "allow_large_files": True,
     "last_target_path": "",
     "last_output_dir": "",
     "last_mode": "single",
 }
 
 
-class SettingsService:
-    """Key-value app settings persisted in SQLite."""
-
-    def bootstrap(self) -> None:
-        try:
-            with get_session_context() as session:
-                for key, value in DEFAULTS.items():
-                    if not session.execute(select(AppSetting).filter_by(key=key)).scalars().first():
-                        session.add(AppSetting(key=key, value=value))
-        except Exception:
-            pass
-
-    def get(self, key: str, fallback: str = "") -> str:
-        try:
-            with get_session_context() as session:
-                row = session.execute(select(AppSetting).filter_by(key=key)).scalars().first()
-                return row.value if row else DEFAULTS.get(key, fallback)
-        except Exception:
+class SettingsManager:
+    """Key-value app settings persisted in JSON."""
+    
+    def __init__(self, store: JSONStore):
+        self.store = store
+        self._bootstrap()
+    
+    def _bootstrap(self):
+        """Initialize default settings if not present."""
+        for key, value in DEFAULTS.items():
+            if self.store.get_setting(key) is None:
+                self.store.set_setting(key, value, value_type=type(value).__name__)
+    
+    def get(self, key: str, fallback: Any = None) -> Any:
+        """Get a setting value."""
+        result = self.store.get_setting(key)
+        if result is None:
             return DEFAULTS.get(key, fallback)
-
-    def set(self, key: str, value: str) -> None:
-        try:
-            with get_session_context() as session:
-                row = session.execute(select(AppSetting).filter_by(key=key)).scalars().first()
-                if row:
-                    row.value = value
-                else:
-                    session.add(AppSetting(key=key, value=value))
-        except Exception:
-            pass
-
-    def get_all(self) -> Dict[str, str]:
-        try:
-            with get_session_context() as session:
-                rows = session.execute(select(AppSetting)).scalars().all()
-                return {r.key: r.value for r in rows}
-        except Exception:
-            return {}
-
-    def set_many(self, data: Dict[str, str]) -> None:
+        
+        # Return the value from the nested structure
+        if isinstance(result, dict):
+            return result.get('value', DEFAULTS.get(key, fallback))
+        return result
+    
+    def set(self, key: str, value: Any) -> None:
+        """Set a setting value."""
+        value_type = type(value).__name__
+        self.store.set_setting(key, value, value_type=value_type, category='general')
+    
+    def get_all(self) -> Dict[str, Any]:
+        """Get all settings as a simple dict."""
+        raw_settings = self.store.get_all_settings()
+        result = {}
+        for key, setting_data in raw_settings.items():
+            if isinstance(setting_data, dict):
+                result[key] = setting_data.get('value')
+            else:
+                result[key] = setting_data
+        return result
+    
+    def set_many(self, data: Dict[str, Any]) -> None:
+        """Set multiple settings at once."""
         for key, value in data.items():
+            self.set(key, value)
+    
+    def reset_to_defaults(self):
+        """Reset all settings to defaults."""
+        for key, value in DEFAULTS.items():
             self.set(key, value)

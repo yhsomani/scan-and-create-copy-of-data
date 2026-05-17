@@ -1,1 +1,24 @@
-(src/antigravity/models/__init__.py)
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg-info/
+
+# Dependencies
+.venv/
+venv/
+.env
+.env.local
+.env.*
+
+# Logs
+*.log
+
+# Build artifacts
+build/
+dist/
+```
