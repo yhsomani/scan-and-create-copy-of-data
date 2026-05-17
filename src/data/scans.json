@@ -2,11 +2,11 @@
   "scans": [
     {
       "id": 1,
-      "status": "pending",
+      "status": "completed",
       "created_at": "2026-05-17T07:49:07.215667",
-      "updated_at": "2026-05-17T07:49:07.215667",
+      "updated_at": "2026-05-17T08:34:55.962310",
       "started_at": null,
-      "completed_at": null,
+      "completed_at": "2026-05-17T08:34:55.962019",
       "source_paths": [],
       "output_dir": "",
       "scan_mode": "single",
@@ -18,13 +18,48 @@
       },
       "files_scanned": 0,
       "lines_processed": 0,
-      "bytes_processed": 0,
+      "bytes_processed": 1024,
       "errors_count": 0,
       "warnings_count": 0,
       "error_messages": [],
-      "progress_percent": 0.0,
-      "estimated_time_remaining": null
+      "progress_percent": 100.0,
+      "estimated_time_remaining": null,
+      "files_processed": 10,
+      "elapsed_seconds": 2.5
+    },
+    {
+      "id": 2,
+      "status": "completed",
+      "created_at": "2026-05-17T08:34:49.119522",
+      "updated_at": "2026-05-17T08:34:49.126804",
+      "started_at": null,
+      "completed_at": "2026-05-17T08:34:49.120199",
+      "source_paths": [
+        "data\\cli_test_out.txt"
+      ],
+      "output_dir": "data\\cli_test_out.txt",
+      "scan_mode": "multi",
+      "config_json": {
+        "root_path": "data\\cli_test_out.txt",
+        "output_path": "data\\cli_test_out.txt",
+        "source_paths": [
+          "data\\cli_test_out.txt"
+        ],
+        "output_dir": "data\\cli_test_out.txt",
+        "scan_mode": "multi",
+        "config_json": {}
+      },
+      "files_scanned": 0,
+      "lines_processed": 313,
+      "bytes_processed": 10061,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "error_messages": [],
+      "progress_percent": 100.0,
+      "estimated_time_remaining": null,
+      "files_processed": 5,
+      "elapsed_seconds": 0.0
     }
   ],
-  "next_id": 2
+  "next_id": 3
 }

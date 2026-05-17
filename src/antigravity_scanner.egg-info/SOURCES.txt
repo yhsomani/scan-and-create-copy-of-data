@@ -5,9 +5,6 @@ setup.cfg
 src/antigravity/__init__.py
 src/antigravity/__main__.py
 src/antigravity/cli.py
-src/antigravity/cli/__init__.py
-src/antigravity/cli/commands.py
-src/antigravity/cli/prompts.py
 src/antigravity/core/__init__.py
 src/antigravity/core/chunk_manager.py
 src/antigravity/core/filters.py
@@ -29,12 +26,11 @@ src/antigravity/gui/views/scan_view.py
 src/antigravity/gui/views/scanner_view.py
 src/antigravity/gui/views/settings_view.py
 src/antigravity/gui/views/toolkit_view.py
-src/antigravity/models/__init__.py
-src/antigravity/models/models.py
 src/antigravity/schemas/config.py
 src/antigravity/services/__init__.py
 src/antigravity/services/config.py
-src/antigravity/services/database.py
+src/antigravity/services/history.py
+src/antigravity/services/json_store.py
 src/antigravity/services/logger.py
 src/antigravity/services/settings.py
 src/antigravity/tools/__init__.py

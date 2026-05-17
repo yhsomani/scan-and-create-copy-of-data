@@ -1,0 +1,16 @@
+{
+  "files_scanned": 5,
+  "files_processed": 5,
+  "files_skipped": 0,
+  "bytes_processed": 10061,
+  "lines_processed": 313,
+  "errors": 0,
+  "elapsed_seconds": 0.01,
+  "ext_summary": {
+    ".py": {
+      "count": 5,
+      "lines": 313,
+      "bytes": 10061
+    }
+  }
+}

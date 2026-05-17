@@ -473,4 +473,4 @@ class DirectoryScanner:
             with self.config.cache_file.open("w", encoding="utf-8") as f:
                 json.dump(new_cache, f, indent=2)
         except Exception as e:
-            self.log_error(self.config.cache_file, e)
+            self.log_error(self.config.cache_file, e) as the compatible adapter class at the top

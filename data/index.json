@@ -1,0 +1,70 @@
+{
+  "summary": {
+    "files_scanned": 5,
+    "files_processed": 5,
+    "files_skipped": 0,
+    "bytes_processed": 10061,
+    "lines_processed": 313,
+    "errors": 0,
+    "elapsed_seconds": 0.01,
+    "ext_summary": {
+      ".py": {
+        "count": 5,
+        "lines": 313,
+        "bytes": 10061
+      }
+    }
+  },
+  "files": [
+    {
+      "relative_path": "__init__.py",
+      "absolute_path": "C:\\Users\\yashs\\Documents\\scan\\src\\antigravity\\utils\\__init__.py",
+      "size_bytes": 0,
+      "lines": 0,
+      "extension": ".py",
+      "encoding": "utf-8",
+      "output_file": "py.txt.gz",
+      "part_number": 1
+    },
+    {
+      "relative_path": "file_utils.py",
+      "absolute_path": "C:\\Users\\yashs\\Documents\\scan\\src\\antigravity\\utils\\file_utils.py",
+      "size_bytes": 4643,
+      "lines": 144,
+      "extension": ".py",
+      "encoding": "utf-8",
+      "output_file": "py.txt.gz",
+      "part_number": 1
+    },
+    {
+      "relative_path": "encoding_utils.py",
+      "absolute_path": "C:\\Users\\yashs\\Documents\\scan\\src\\antigravity\\utils\\encoding_utils.py",
+      "size_bytes": 3353,
+      "lines": 100,
+      "extension": ".py",
+      "encoding": "utf-8",
+      "output_file": "py.txt.gz",
+      "part_number": 1
+    },
+    {
+      "relative_path": "platform.py",
+      "absolute_path": "C:\\Users\\yashs\\Documents\\scan\\src\\antigravity\\utils\\platform.py",
+      "size_bytes": 408,
+      "lines": 14,
+      "extension": ".py",
+      "encoding": "utf-8",
+      "output_file": "py.txt.gz",
+      "part_number": 1
+    },
+    {
+      "relative_path": "logger.py",
+      "absolute_path": "C:\\Users\\yashs\\Documents\\scan\\src\\antigravity\\utils\\logger.py",
+      "size_bytes": 1657,
+      "lines": 55,
+      "extension": ".py",
+      "encoding": "utf-8",
+      "output_file": "py.txt.gz",
+      "part_number": 1
+    }
+  ]
+}

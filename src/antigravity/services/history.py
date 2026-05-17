@@ -233,3 +233,31 @@ class ScanHistoryService:
     def get_all_settings(self, category: Optional[str] = None) -> List[Dict[str, Any]]:
         """Get all application settings, optionally filtered by category."""
         return self.store.get_all_settings(category=category)
+        return self.store.get_default_config_profile()
+    
+    # ========== App Settings ==========
+    
+    def get_setting(self, key: str, default: Any = None) -> Any:
+        """Get an application setting."""
+        result = self.store.get_setting(key)
+        return result if result is not None else default
+    
+    def set_setting(
+        self,
+        key: str,
+        value: Any,
+        description: Optional[str] = None,
+        category: Optional[str] = None,
+        is_public: bool = True,
+        is_editable: bool = True,
+    ) -> None:
+        """Set an application setting."""
+        self.store.set_setting(key, value, description or "", category or "general")
+    
+    def get_all_settings(self, category: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Get all application settings, optionally filtered by category."""
+        return self.store.get_all_settings(category=category)
+
+
+HistoryService = ScanHistoryService
+
