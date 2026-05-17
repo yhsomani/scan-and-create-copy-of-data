@@ -30,11 +30,11 @@ src/antigravity/gui/views/scanner_view.py
 src/antigravity/gui/views/settings_view.py
 src/antigravity/gui/views/toolkit_view.py
 src/antigravity/models/__init__.py
+src/antigravity/models/models.py
 src/antigravity/schemas/config.py
 src/antigravity/services/__init__.py
 src/antigravity/services/config.py
 src/antigravity/services/database.py
-src/antigravity/services/history.py
 src/antigravity/services/logger.py
 src/antigravity/services/settings.py
 src/antigravity/tools/__init__.py

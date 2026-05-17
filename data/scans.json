@@ -1,0 +1,61 @@
+{
+  "scans": [
+    {
+      "id": 1,
+      "status": "completed",
+      "created_at": "2026-05-17T07:38:28.515126",
+      "updated_at": "2026-05-17T07:38:28.515919",
+      "started_at": "2026-05-17T07:38:28.515437",
+      "completed_at": "2026-05-17T07:38:28.515841",
+      "source_paths": [
+        "/test"
+      ],
+      "output_dir": "/output",
+      "scan_mode": "multi",
+      "config_json": {
+        "source_paths": [
+          "/test"
+        ],
+        "output_dir": "/output",
+        "scan_mode": "multi"
+      },
+      "files_scanned": 10,
+      "lines_processed": 500,
+      "bytes_processed": 0,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "error_messages": [],
+      "progress_percent": 100.0,
+      "estimated_time_remaining": null
+    },
+    {
+      "id": 2,
+      "status": "completed",
+      "created_at": "2026-05-17T07:38:37.473637",
+      "updated_at": "2026-05-17T07:38:37.474562",
+      "started_at": "2026-05-17T07:38:37.473900",
+      "completed_at": "2026-05-17T07:38:37.474474",
+      "source_paths": [
+        "/home"
+      ],
+      "output_dir": "/tmp/out",
+      "scan_mode": "chunked",
+      "config_json": {
+        "source_paths": [
+          "/home"
+        ],
+        "output_dir": "/tmp/out",
+        "scan_mode": "chunked"
+      },
+      "files_scanned": 1,
+      "lines_processed": 50,
+      "bytes_processed": 1024,
+      "errors_count": 0,
+      "warnings_count": 0,
+      "error_messages": [],
+      "progress_percent": 100.0,
+      "estimated_time_remaining": null
+    }
+  ],
+  "next_id": 3
+}

@@ -165,3 +165,31 @@ class ScanConfig(BaseModel):
     @property
     def log_file(self) -> Path:
         return self.output_dir / self.log_file_name
+
+
+class ConfigLoader:
+    """Load and manage configuration profiles."""
+    
+    def __init__(self, store=None):
+        from antigravity.services.json_store import JSONStore
+        self.store = store or JSONStore()
+    
+    def load_profile(self, profile_id: int) -> Optional[Dict]:
+        """Load a config profile by ID."""
+        return self.store.get_config_profile(profile_id)
+    
+    def save_profile(self, name: str, config: Dict, is_default: bool = False) -> Dict:
+        """Save a config profile."""
+        return self.store.save_config_profile(name, config, is_default)
+    
+    def get_all_profiles(self) -> List[Dict]:
+        """Get all config profiles."""
+        return self.store.get_all_config_profiles()
+    
+    def get_default_profile(self) -> Optional[Dict]:
+        """Get the default config profile."""
+        return self.store.get_default_config_profile()
+    
+    def delete_profile(self, profile_id: int) -> bool:
+        """Delete a config profile."""
+        return self.store.delete_config_profile(profile_id)

@@ -1,144 +1,456 @@
 Metadata-Version: 2.4
 Name: antigravity-scanner
-Version: 5.0.0
-Summary: High-performance directory analysis and organization suite.
-Requires-Python: >=3.12
+Version: 2.0.0
+Summary: High-performance codebase scanner and text extractor for LLM/RAG preparation
+Author-email: Antigravity Team <dev@antigravity.local>
+License: MIT
+Keywords: scanner,rag,llm,code-analysis,pyqt6
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Requires-Python: >=3.9
 Description-Content-Type: text/markdown
 Requires-Dist: PyQt6>=6.6.0
-Requires-Dist: SQLAlchemy>=2.0.0
+Requires-Dist: typer[all]>=0.9.0
+Requires-Dist: sqlalchemy>=2.0.0
 Requires-Dist: pydantic>=2.5.0
-Requires-Dist: typer[all]>=0.12.0
-Requires-Dist: rich>=13.0.0
+Requires-Dist: pydantic-settings>=2.1.0
+Requires-Dist: rich>=13.7.0
+Requires-Dist: blake3>=0.4.0
+Requires-Dist: python-magic-bin>=0.4.14; sys_platform == "win32"
+Requires-Dist: python-magic>=0.4.27; sys_platform != "win32"
+Requires-Dist: chardet>=5.2.0
+Requires-Dist: pathspec>=0.12.0
+Requires-Dist: psutil>=5.9.0
+Requires-Dist: orjson>=3.9.0
 Requires-Dist: qasync>=0.27.1
 Requires-Dist: xxhash>=3.4.1
+Provides-Extra: dev
+Requires-Dist: pytest>=7.4.0; extra == "dev"
+Requires-Dist: pytest-qt>=4.2.0; extra == "dev"
+Requires-Dist: pytest-cov>=4.1.0; extra == "dev"
+Requires-Dist: mypy>=1.8.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Requires-Dist: black>=23.12.0; extra == "dev"
+Requires-Dist: pre-commit>=3.6.0; extra == "dev"
+Requires-Dist: hypothesis>=6.90.0; extra == "dev"
+Provides-Extra: analytics
+Requires-Dist: matplotlib>=3.8.0; extra == "analytics"
+Requires-Dist: pandas>=2.1.0; extra == "analytics"
+Provides-Extra: ai
+Requires-Dist: ollama>=0.1.0; extra == "ai"
+Requires-Dist: openai>=1.7.0; extra == "ai"
+Provides-Extra: docs
+Requires-Dist: mkdocs>=1.5.0; extra == "docs"
+Requires-Dist: mkdocs-material>=9.5.0; extra == "docs"
+Provides-Extra: extractors
+Requires-Dist: pypdf2>=3.0.0; extra == "extractors"
+Requires-Dist: python-docx>=1.1.0; extra == "extractors"
+Requires-Dist: pillow>=10.0.0; extra == "extractors"
+Requires-Dist: pytesseract>=0.3.10; extra == "extractors"
 
-# Antigravity Scanner — Single Source of Truth (SSOT)
+# Antigravity Scanner
 
-## 1. PROJECT OVERVIEW
-Antigravity Scanner is a high-performance, professional-grade desktop utility for massive-scale repository analysis, code extraction, and file organization. 
-- **Goals**: Facilitate ingestion of massive codebases (100GB+) without memory exhaustion for LLM context preparation and provide robust file organization tools.
-- **Target Users**: Developers, Data Engineers, AI Practitioners.
-- **Business/System Purpose**: Streamline the preparation of structured data from complex directory trees.
-- **Major Workflows**: Scanning and text extraction, Directory cleaning and hierarchy flattening.
-- **Major System Modules**: GUI (PyQt6), CLI (Typer), Core Engine (ThreadPoolExecutor), Organization Toolkit.
-- **Core Technical Stack**: Python 3.12+, PyQt6, SQLAlchemy, SQLite, Typer.
-- **Platform Limitations**: Primarily targeted for Windows desktop execution (via `build_exe.py`).
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
-## 2. COMPLETE ARCHITECTURE OVERVIEW
-The architecture follows a dual-interface desktop application model utilizing a shared core engine.
-- **Frontend Architecture**: PyQt6-based desktop UI. Unified single-window dashboard with tabbed navigation (Primary, Advanced, Organization). Designed with Apple HIG principles.
-- **Backend Architecture**: Local Python 3.12 Core Engine.
-  - `DirectoryScanner`: Orchestrates recursive traversal using `ThreadPoolExecutor`.
-  - `FileFilter`: Applies `.scanignore` and binary detection logic.
-  - `OutputWriter`: Handles chunked, multi-file, or single-file atomic writing.
-- **API Architecture**: N/A (Local desktop app).
-- **Database Architecture**: Local SQLite database (`antigravity_scanner.db`) managed via SQLAlchemy ORM (WAL mode enabled).
-- **Queue/Websocket/AI/Preview/Youtube Architectures**: N/A (Local utility application).
+**High-performance codebase scanner and text extractor for LLM/RAG preparation.**
 
-## 3. COMPLETE FEATURE INVENTORY
-- **Massive-Scale Scanner**: Parallelized traversal, incremental caching, `.scanignore` support.
-- **Dynamic Output Partitioning**: Single, Multi (by extension), and Chunked modes. Real-time compression (Gzip).
-- **File Organizer Toolkit**:
-  - **Prefixer**: Add/remove parent folder names as prefixes.
-  - **Cleaner**: Remove duplicate numeric suffixes.
-  - **Purger**: Recursively remove empty folders.
-  - **Hierarchy Shifter**: Move files up one level or completely flatten nested trees to the root.
-  - **Pattern Mover**: Group files based on naming patterns.
-- **System Cleanup**: Admin utility to purge Windows temp caches.
+Scan massive repositories (100GB+), extract readable text content, and organize files with powerful tools—all while maintaining bounded memory usage and responsive UI.
 
-## 4. USER ROLE SYSTEM
-**N/A**: Antigravity Scanner is a local desktop application executed by the system user. There are no role-based access controls (RBAC), admins, guests, or teachers.
+## Features
 
-## 5. COMPLETE PAGE-BY-PAGE ANALYSIS
-**GUI Dashboard Analysis**:
-- **Primary Tab**: Target/Output directory selection, Scan Mode (Single/Multi/Chunked), Worker count, Recent Scan History ledger.
-- **Advanced Tab**: Output limits (Max MB/Files), Engine Flags (Resume, Incremental, Follow Symlinks, Gzip, Dry-run), Filters (Skip hidden, large files), Console real-time log streaming.
-- **Organization Tab**: Integrated toolkit execution buttons (Prefix, Clean, Purge, Flatten) with background progress snackbars.
+### Core Capabilities
+- **Multi-mode Scanning**: Single file, multi-file by extension, or chunked by size/token count
+- **Incremental Scans**: Blake3/xxhash-based caching for fast re-scans
+- **Smart Filtering**: `.scanignore` files (gitignore-style), binary detection, size limits, regex patterns
+- **Text Extraction**: Code files, PDF, DOCX, archives (ZIP/TAR), optional OCR for images
+- **Organization Toolkit**: Prefixer, Cleaner, Purger, Flattener, Pattern Mover, Duplicate Detector
+- **Dual Interface**: Modern PyQt6 GUI + Full-featured CLI with rich output
 
-**CLI Analysis**:
-- `scan` command: Complete parity with GUI scan configuration (`--mode`, `--max-chunk-mb`, `--workers`, `--auto-calc`).
+### Performance
+- **Streaming I/O**: Handle arbitrarily large files without OOM
+- **Thread Pool**: Adaptive worker count based on system resources
+- **Atomic Writes**: Safe output with rollback capability
+- **Progress Tracking**: Real-time updates with ETA estimation
 
-## 6. COMPLETE API DOCUMENTATION
-**N/A**: This application does not expose or consume external REST/GraphQL APIs. Communication between UI and Engine is done via direct Python function calls and `QThread` signals.
+### Analytics & Insights
+- File type breakdown (pie charts)
+- Size distribution (treemaps)
+- Scan history timeline
+- Resource monitoring (CPU, RAM, I/O)
 
-## 7. DATABASE DOCUMENTATION
-- **Engine**: SQLite 3 with WAL (Write-Ahead Logging) enabled. File: `antigravity_scanner.db`.
-- **ORM**: SQLAlchemy.
-- **Schemas / Tables**:
-  - `ScanRecord`: Tracks scan history, metrics (files processed, bytes, elapsed time), mode, and success status.
-  - `AppSetting`: Stores sticky GUI preferences and application state.
+### AI Integration (Optional)
+- LLM summarization hooks (Ollama local or OpenAI/Anthropic APIs)
+- Token estimation for context window planning
+- Smart chunking for RAG pipelines
 
-## 8. YOUTUBE SYSTEM DOCUMENTATION
-**N/A**: No YouTube integration in this project.
+## Installation
 
-## 9. AI SYSTEM DOCUMENTATION
-**N/A**: While the tool prepares text data for LLMs, it does not integrate live AI providers, prompts, or model inference workflows.
+### From Source (Recommended for Development)
 
-## 10. PREVIEW / CONVERTER SYSTEM DOCUMENTATION
-**N/A**: No live preview, rendering pipelines, or component matching.
+```bash
+# Clone the repository
+git clone https://github.com/your-org/antigravity-scanner.git
+cd antigravity-scanner
 
-## 11. FRONTEND DOCUMENTATION
-- **UI Framework**: PyQt6.
-- **Architecture**: Separated into components (`components.py`), controllers (`controllers.py`), and views (`app.py`, `views/`).
-- **Styling**: Standardized `QSS` (Qt Style Sheets) defined in `theme.py`, following Apple Design System tokens (Dark/Light modes).
-- **State Management**: Handled via `controllers.py` and persistent `AppSetting` database records.
-- **Concurrency**: `QThreadPool` and `QRunnable` ensure the UI remains responsive during intensive file I/O.
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-## 12. BACKEND DOCUMENTATION
-- **Core Engine (`src/antigravity/core/`)**:
-  - `scanner.py`: Manages the concurrent directory walk.
-  - `filters.py`: Logic for ignoring files.
-  - `writer.py`: Handles atomic file writing and partitioning logic.
-  - `chunk_manager.py`: Calculates output split logic.
-- **Services (`src/antigravity/services/`)**:
-  - `database.py`: SQLAlchemy session factories.
-  - `history.py`: Ledger management.
-  - `settings.py`: UI preference loading/saving.
+# Install with development dependencies
+pip install -e ".[dev,analytics,extractors]"
 
-## 13. ERROR HANDLING DOCUMENTATION
-- **Global Error System**: `logger.py` handles application-wide structured logging.
-- **Backend Error Handling**: Skipped files or unreadable paths are gracefully caught and logged to `error.log` in the output directory. The scan continues without crashing.
-- **Frontend Error Handling**: Exceptions in worker threads emit signals to the main UI thread, displaying as error Snackbars or warning dialogs.
-- **Recovery Flows**: Interrupted scans maintain state in `.scan_state.json` allowing for resume operations.
+# Install pre-commit hooks
+pre-commit install
+```
 
-## 14. SECURITY DOCUMENTATION
-- **Path Traversal Protection**: Uses `pathlib` for absolute path normalization to prevent writing outside designated output directories.
-- **Safe I/O**: Atomic writes prevent data corruption during interruption.
-- **XSS/CSRF/Auth**: N/A (Desktop application).
+### Quick Install
 
-## 15. PERFORMANCE DOCUMENTATION
-- **Parallelization**: `ThreadPoolExecutor` maximizes I/O throughput across CPU cores.
-- **Memory Optimization**: Streaming I/O with 1MB chunk buffers allows the tool to process arbitrarily large files without RAM exhaustion.
-- **Incremental Cache**: Hashes file mtime/size into `scan_cache.json` to instantly skip unmodified files on subsequent runs.
-- **Database Optimization**: SQLite WAL mode prevents read/write locks during UI updates.
+```bash
+pip install antigravity-scanner
+```
 
-## 16. DEVOPS & DEPLOYMENT
-- **Local Setup**: `python -m venv .venv`, `pip install -r requirements.txt`.
-- **Build Process**: `build_exe.py` wraps PyInstaller to create a standalone Windows `.exe` file. Includes specs via `AntigravityScanner.spec`.
-- **Deployment**: Distributed as a portable executable.
-- **Monitoring/Logging**: Handled locally via `logs/` directory and per-scan `error.log`.
+### Optional Dependencies
 
-## 17. ENVIRONMENT VARIABLES
-**N/A**: Configuration is handled via `pyproject.toml`, database `AppSetting`, and CLI flags. No environment variables are strictly required for operation.
+```bash
+# For analytics dashboard
+pip install "antigravity-scanner[analytics]"
 
-## 18. KNOWN ISSUES & TECHNICAL DEBT
-- **Technical Debt**: Former plugin system and security scanning modules were pruned but traces may remain in old branch history.
-- **Future Improvements**: Cross-platform executable builds (macOS/Linux) via GitHub Actions.
+# For AI features
+pip install "antigravity-scanner[ai]"
 
-## 19. REBUILD INSTRUCTIONS
-1. **Clone Repository**: Extract the codebase.
-2. **Environment Setup**:
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-3. **Database Initialization**: Runs automatically on first execution via SQLAlchemy `create_all()`.
-4. **Execution**: Run `python src/antigravity/__main__.py` to start the GUI.
-5. **Deployment Build**: Run `python build_exe.py` to generate the standalone Windows binary.
+# For document extraction (PDF, DOCX, OCR)
+pip install "antigravity-scanner[extractors]"
 
-## 20. FINAL AUDIT SECTION
-- **Feature Completeness**: All engine modes and UI tabs are fully implemented.
-- **Missing Systems**: None.
-- **Documentation Refactoring**: `README.md` and `USAGE.md` have been consolidated into this `SSOT.md` and marked for removal.
-- **Readiness**: Production-ready. This SSOT serves as the definitive reference for the Antigravity Scanner architecture.
+# All extras
+pip install "antigravity-scanner[dev,analytics,ai,extractors]"
+```
+
+## Usage
+
+### GUI Application
+
+```bash
+# Launch the graphical interface
+antigravity-gui
+
+# Or via Python module
+python -m antigravity
+```
+
+### Command Line Interface
+
+```bash
+# Basic scan
+antigravity scan /path/to/repo --output output.txt.gz
+
+# Scan with filters
+antigravity scan /path/to/repo \
+    --include "*.py" "*.js" "*.md" \
+    --exclude "node_modules" "dist" ".git" \
+    --max-size 10MB \
+    --output scan_result.txt
+
+# Incremental scan (uses cache)
+antigravity scan /path/to/repo --incremental --cache-dir ~/.antigravity/cache
+
+# Chunked output (for large contexts)
+antigravity scan /path/to/repo \
+    --mode chunked \
+    --chunk-size 4000 \
+    --output-dir chunks/
+
+# Organization tools
+antigravity organize /path/to/files \
+    --tool cleaner \
+    --dry-run  # Preview changes without applying
+
+# View scan history
+antigravity history --limit 20 --format table
+
+# Export analytics report
+antigravity analytics /path/to/repo --report html --output report.html
+```
+
+### CLI Help
+
+```bash
+antigravity --help
+antigravity scan --help
+antigravity organize --help
+```
+
+## Configuration
+
+### Environment Variables
+
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ANTIGRAVITY_CONFIG` | Path to config file | `~/.antigravity/config.toml` |
+| `ANTIGRAVITY_LOG_LEVEL` | Logging level | `INFO` |
+| `ANTIGRAVITY_CACHE_DIR` | Cache directory | `~/.antigravity/cache` |
+| `ANTIGRAVITY_DB_PATH` | SQLite database path | `~/.antigravity/antigravity.db` |
+| `OPENAI_API_KEY` | OpenAI API key (optional) | - |
+| `ANTHROPIC_API_KEY` | Anthropic API key (optional) | - |
+
+### Configuration File (TOML)
+
+Create `~/.antigravity/config.toml`:
+
+```toml
+[general]
+theme = "system"  # "light", "dark", "system"
+language = "en"
+max_workers = "auto"  # or integer
+
+[scan]
+default_mode = "multi"
+chunk_size = 4000
+chunk_overlap = 200
+enable_incremental = true
+follow_symlinks = false
+max_file_size = "100MB"
+exclude_patterns = [".git", "node_modules", "__pycache__", "*.pyc"]
+
+[filters]
+detect_binary = true
+min_text_ratio = 0.7
+encoding_detection = "chardet"
+
+[output]
+compression = "gzip"  # "none", "gzip"
+atomic_writes = true
+include_metadata = true
+
+[ai]
+provider = "ollama"  # "ollama", "openai", "anthropic"
+model = "llama2"
+api_base = "http://localhost:11434"
+
+[logging]
+level = "INFO"
+file = "~/.antigravity/logs/antigravity.log"
+rotation = "10MB"
+backup_count = 5
+```
+
+### .scanignore Files
+
+Create `.scanignore` files in directories to exclude patterns (gitignore syntax):
+
+```gitignore
+# Ignore node modules
+node_modules/
+vendor/
+
+# Ignore build artifacts
+*.pyc
+__pycache__/
+*.so
+*.dll
+
+# Ignore large data files
+*.pkl
+*.h5
+data/*.csv
+
+# Ignore secrets
+.env
+*.key
+secrets/
+```
+
+## Architecture
+
+```
+antigravity-scanner/
+├── src/antigravity/
+│   ├── __init__.py          # Package init, version info
+│   ├── __main__.py          # GUI entry point
+│   ├── cli.py               # Typer CLI application
+│   ├── core/                # Business logic (UI-agnostic)
+│   │   ├── scanner.py       # Directory scanning engine
+│   │   ├── writer.py        # Output writers (text, gzip, json)
+│   │   ├── filters.py       # File filtering logic
+│   │   ├── extractors/      # Format-specific extractors
+│   │   │   ├── base.py
+│   │   │   ├── code.py
+│   │   │   ├── pdf.py
+│   │   │   ├── docx.py
+│   │   │   └── ocr.py
+│   │   └── organizer/       # File organization tools
+│   │       ├── base.py
+│   │       ├── prefixer.py
+│   │       ├── cleaner.py
+│   │       ├── purger.py
+│   │       ├── flattener.py
+│   │       └── pattern_mover.py
+│   ├── gui/                 # PyQt6 components
+│   │   ├── app.py           # Main application window
+│   │   ├── themes/          # Theme definitions
+│   │   ├── views/           # Tab views
+│   │   │   ├── primary.py
+│   │   │   ├── advanced.py
+│   │   │   ├── organizer.py
+│   │   │   ├── history.py
+│   │   │   └── settings.py
+│   │   ├── widgets/         # Reusable widgets
+│   │   └── dialogs/         # Modal dialogs
+│   ├── models/              # SQLAlchemy ORM models
+│   │   └── database.py
+│   ├── services/            # Business services
+│   │   ├── database.py      # DB connection & migrations
+│   │   ├── history.py       # Scan history management
+│   │   ├── settings.py      # Settings management
+│   │   └── cache.py         # Incremental cache service
+│   ├── schemas/             # Pydantic validation schemas
+│   │   ├── config.py
+│   │   ├── scan.py
+│   │   └── organizer.py
+│   └── utils/               # Utilities
+│       ├── logging.py       # Structured logging
+│       ├── paths.py         # Path utilities
+│       ├── concurrency.py   # Thread pool helpers
+│       └── platform.py      # Cross-platform helpers
+├── tests/                   # Test suite
+├── pyproject.toml           # Project configuration
+├── .pre-commit-config.yaml  # Pre-commit hooks
+└── README.md                # This file
+```
+
+## Development
+
+### Running Tests
+
+```bash
+# Run all tests with coverage
+pytest
+
+# Run specific test module
+pytest tests/test_scanner.py -v
+
+# Run with coverage report
+pytest --cov=src/antigravity --cov-report=html
+
+# Run GUI tests (requires display)
+pytest tests/gui/ -v
+```
+
+### Code Quality
+
+```bash
+# Format code
+black src/ tests/
+
+# Lint code
+ruff check src/ tests/
+
+# Type checking
+mypy src/antigravity
+
+# Run all checks
+pre-commit run --all-files
+```
+
+### Building Executables
+
+```bash
+# Windows
+pyinstaller AntigravityScanner.spec
+
+# macOS
+pyinstaller AntigravityScanner-macOS.spec
+
+# Linux
+pyinstaller AntigravityScanner-linux.spec
+```
+
+## Database Schema
+
+The application uses SQLite with the following tables:
+
+- **scan_records**: Completed scan metadata
+- **scan_files**: Individual file tracking (for incremental scans)
+- **scan_config_profiles**: Saved scan configurations
+- **app_settings**: Application settings
+
+Database location: `~/.antigravity/antigravity.db`
+
+## Security Considerations
+
+- **Path Traversal Protection**: All paths are normalized and validated
+- **Output Directory Sandboxing**: Write operations restricted to allowed directories
+- **Permission Checks**: Verify read/write permissions before operations
+- **Binary Detection**: Magic byte analysis prevents processing non-text files
+- **No External Calls**: Core scanning operates offline; AI features require explicit opt-in
+
+## Troubleshooting
+
+### Common Issues
+
+**Issue**: "Permission denied" errors during scan  
+**Solution**: Check file permissions or run with appropriate user privileges
+
+**Issue**: High memory usage  
+**Solution**: Reduce `--max-workers` or enable chunked mode
+
+**Issue**: Slow incremental scans  
+**Solution**: Clear cache with `antigravity cache clear` and rescan
+
+**Issue**: GUI not starting on Linux  
+**Solution**: Ensure PyQt6 is properly installed: `pip install --force-reinstall PyQt6`
+
+### Logs
+
+Logs are stored at `~/.antigravity/logs/antigravity.log`. Increase verbosity:
+
+```bash
+export ANTIGRAVITY_LOG_LEVEL=DEBUG
+antigravity scan /path --verbose
+```
+
+## Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes with tests
+4. Run pre-commit hooks (`pre-commit run --all-files`)
+5. Ensure tests pass (`pytest`)
+6. Commit with conventional commits
+7. Push and open a Pull Request
+
+### Code Style
+
+- Use Black for formatting
+- Use Ruff for linting
+- Add type hints to all functions
+- Write docstrings for public APIs
+- Maintain >80% test coverage
+
+## License
+
+MIT License - see [LICENSE](LICENSE) for details.
+
+## Acknowledgments
+
+- Built with [PyQt6](https://www.riverbankcomputing.com/software/pyqt/)
+- CLI powered by [Typer](https://typer.tiangolo.com/) and [Rich](https://rich.readthedocs.io/)
+- Hashing by [blake3](https://github.com/oconnor663/blake3)
+- Inspiration from various code analysis tools
+
+---
+
+**Version**: 2.0.0  
+**Last Updated**: 2024  
+**Maintainers**: Antigravity Team

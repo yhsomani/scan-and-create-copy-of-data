@@ -1,0 +1,70 @@
+{
+  "settings": {
+    "theme": {
+      "value": "dark",
+      "type": "str",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.455971"
+    },
+    "default_mode": {
+      "value": "single",
+      "type": "str",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.456351"
+    },
+    "default_format": {
+      "value": "text",
+      "type": "str",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.456830"
+    },
+    "default_workers": {
+      "value": 4,
+      "type": "int",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.457158"
+    },
+    "max_chunk_mb": {
+      "value": 10.0,
+      "type": "float",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.457464"
+    },
+    "max_output_files": {
+      "value": 5,
+      "type": "int",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.457748"
+    },
+    "skip_hidden": {
+      "value": true,
+      "type": "bool",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.458045"
+    },
+    "allow_large_files": {
+      "value": true,
+      "type": "bool",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.458344"
+    },
+    "last_target_path": {
+      "value": "",
+      "type": "str",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.458686"
+    },
+    "last_output_dir": {
+      "value": "",
+      "type": "str",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.458990"
+    },
+    "last_mode": {
+      "value": "single",
+      "type": "str",
+      "category": "general",
+      "updated_at": "2026-05-17T07:38:37.470949"
+    }
+  }
+}
